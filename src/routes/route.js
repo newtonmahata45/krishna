@@ -5,37 +5,89 @@ const underscore = require('underscore')
 const router = express.Router();
 
 
-router.get('/sol1', function (req, res) {
-    let arr = [1, 2, 3, 5, 6, 7]
-    let n = arr.length + 1
-    // console.log(n)
-    sumOfTheNo = n * (n + 1) / 2
-    sumOfArr = 0
-    for (i = 0; i < arr.length; i++) {
-        const element = arr[i]
-        sumOfArr = sumOfArr + element
+
+// let players =
+//     [
+//         {
+//             "name": "manish",
+//             "dob": "1/1/1995",
+//             "gender": "male",
+//             "city": "jalandhar",
+//             "sports": [
+//                 "swimming"
+//             ]
+//         },
+//         {
+//             "name": "gopal",
+//             "dob": "1/09/1995",
+//             "gender": "male",
+//             "city": "delhi",
+//             "sports": [
+//                 "soccer"
+//             ]
+//         },
+//         {
+//             "name": "lokesh",
+//             "dob": "1/1/1990",
+//             "gender": "male",
+//             "city": "mumbai",
+//             "sports": [
+//                 "soccer"
+//             ]
+//         },
+//     ]
+
+// router.post('/players', (req, res) => {
+//     let player = req.body;
+//     let playerExists = players.find(p => p.name === player.name);
+//     if (playerExists) {
+//         res.send('Player already exists');
+//     } else {
+//         players.push(player);
+//         res.send(players);
+//     }
+// });
+
+let persons = [
+    {
+        name: "PK",
+        age: 10,
+        votingStatus: false
+    },
+    {
+        name: "SK",
+        age: 20,
+        votingStatus: false
+    },
+    {
+        name: "AA",
+        age: 70,
+        votingStatus: false
+    },
+    {
+        name: "SC",
+        age: 5,
+        votingStatus: false
+    },
+    {
+        name: "HO",
+        age: 40,
+        votingStatus: false
     }
-    let result = (sumOfTheNo - sumOfArr)
-    console.log(result)
-    res.send({result})
-})
-router.get('/sol2', function (req, res) {
-    let arr = [33, 34, 35, 37, 38]
-    let n = arr.length + 1
-    // console.log(n)
-    sumOfTheNo = n * (arr[0] + arr[arr.length-1]) / 2
-    sumOfArr = 0
-    for (i = 0; i < arr.length; i++) {
-        const element = arr[i]
-        sumOfArr = sumOfArr + element
+]
+
+router.post('/votingAge', function (req, res) {
+    let age = req.query.age
+    let arr = []
+    for (let index = 0; index < persons.length; index++) {
+        const element = persons[index];
+        if (element.age >= age) {
+            element.votingStatus = true
+            arr.push(element)
+        }
+
     }
-    let missingNumber = (sumOfTheNo - sumOfArr)
-    console.log(missingNumber)
-    res.send({ data: missingNumber } )
+    res.send({eligible : arr} )
 })
-
-  
-
-
 module.exports = router;
 // adding this comment for no reason
