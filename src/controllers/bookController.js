@@ -1,48 +1,36 @@
-const authorModel = require("../models/authorModel")
-const bookModel = require("../models/bookModel")
-const publisherModel = require("../models/publisherModel.js")
+const authorModel = require("../models/authorModel");
+const bookModel = require("../models/bookModel");
+const publisherModel = require("../models/publisherModel.js");
+const mongoose = require('mongoose');
+
 
 const createBook = async function (req, res) {
     let book = req.body
 
-    let checkAuthorid = await authorModel.find().select({ _id: 1 })
-    // let checkAuthorid = await authorModel.findById({_id:book.author}).select({_id:1});
-
-    let checkPublisherid = await publisherModel.find().select({ _id: 1 })
-    // let checkPublisherid = await publisherModel.findById({_id:book.publisher}).select({_id:1});
-
-
-
-    // console.log(checkAuthorid)
     if (!book.author) {
         res.send("Author ID is required")
     }
-    // for (i = 0; i < checkAuthorid.length; i++) {
+    else if (!book.publisher) {
+        res.send('Publisher Id is required')
+    }
+    if (!mongoose.Types.ObjectId.isValid(book.author)) {
+    
+        res.send("Author Id is WORNG!")
+    }
+    else if (!mongoose.Types.ObjectId.isValid(book.publisher)){
+        res.send("Publisher Id is WORNG!")
+    }
 
-    //     if (checkAuthorid[i] != book.author) {
-            
-    //         res.send("Author Id is WORNG!")
-    //     }
-        else if (!book.publisher) {
-            res.send('Publisher Id is required')
-        // } else if (checkPublisherid != book.author) {
-        //     res.send("Publisher Id is WORNG!")
-        }
-
-        else {
-            let bookCreated = await bookModel.create(book)
-            // console.log(checkAuthorid)
-            res.send({ data: bookCreated })
-        }
-    // }
+    else {
+        let bookCreated = await bookModel.create(book)
+        res.send({ data: bookCreated })
+    }
+    
 }
 const putNewBook = async function (req, res) {
     let Penguin = await publisherModel.findOne({ name: "Penguin" });
-    // let id1 = obj1._id;
-    // console.log(id1);
+
     let HarperCollins = await publisherModel.findOne({ name: "HarperCollins" });
-    // let id2 = obj2._id;
-    // console.log(id2);
 
     let newbooks = await bookModel.updateMany(
         { publisher: [Penguin, HarperCollins] },
@@ -53,9 +41,10 @@ const putNewBook = async function (req, res) {
     res.send({ data: updatedbooks });
 };
 const updateRating = async function (req, res) {
-    let arr1 = await authorModel.find({ ratings: { $gt: 3.5 } });
+    let arr1 = await authorModel.find({ rating: { $gt: 3.5 } });
     let newarr = [];
     for (i of arr1) {
+    
         id = i._id;
         let tosend = await bookModel.findOneAndUpdate(
             { author: id },
