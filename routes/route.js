@@ -8,11 +8,6 @@ const commonMW = require ("../middlewares/commonMiddlewares")
 router.get("/test-me", function (req, res) {
     res.send("My first ever api!")
 })
-router.get('/falnaAPI',function(req,res){
-    console.log("I'm Falna API")
-    res.send("This is FalnaAPI")
-
-})
 
 
 
