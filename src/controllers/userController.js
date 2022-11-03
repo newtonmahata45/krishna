@@ -1,4 +1,4 @@
-const UserModel= require("../models/userModel")
+const UserModel= require("../models/userModel.js")
 
 
 
@@ -45,8 +45,20 @@ const dummyTwo = function (req, res) {
     else res.send("another example response")
 }
 
-module.exports.createUser= createUser
-module.exports.getUsersData= getUsersData
-module.exports.basicCode= basicCode
-module.exports.dummyOne = dummyOne
-module.exports.dummyTwo = dummyTwo
+
+
+const creatUserDetail= async function (req, res) {
+    let userDatails = req.body
+    let Header= req.headers
+    
+    let userCreated = await UserModel.create(userDatails)
+    res.send({data: userCreated})
+}
+
+
+// module.exports.createUser= createUser
+// module.exports.getUsersData= getUsersData
+// module.exports.basicCode= basicCode
+// module.exports.dummyOne = dummyOne
+// module.exports.dummyTwo = dummyTwo
+module.exports.creatUserDetail = creatUserDetail
