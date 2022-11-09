@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const mongoose =require("mongoose")
+const mongoose = require("mongoose")
 const userModel = require("../models/userModel");
 const authenticate = async function (req, res, next) {
   //check the token in request header
@@ -8,25 +8,24 @@ const authenticate = async function (req, res, next) {
   let token = req.headers["x-auth-token"]
   let user = await userModel.findById(userId);
   if (!token) {
-    return res.send({ status: false, msg: "token must be present" });
+    return res.status(400).send({ status: false, msg: "token must be present" });
   }
   var valid = mongoose.Types.ObjectId.isValid(userId);
-  if(!valid)
-  {
-    
-    //process your code here
-    res.send("UserID is Invalid")
+  if (!valid) {
+    return res.status(400).send("UserID is Invalid")
   }
   if (!user) {
-    return res.send("No such user exists");
+    return res.status(404).send("No such user exists");
+  } 
+  try {
+    let decodedToken = jwt.verify(token, "functionup-lithium-secret-key");
+    if (decodedToken) {
+      next()
+    }
+  } catch (error) {
+    return res.status(400).send({ status: false, error: error.message });//"Token is Invalid" 
   }
-  try{
-  let decodedToken = jwt.verify(token, "functionup-lithium-secret-key");
-  console.log(decodedToken)
-  }catch(error){
-    return res.status(400).send({ status: false, error:error});//status: false, msg: "Token is Invalid" 
-  }
-  next()
+
 }
 
 const authorise = function (req, res, next) {
@@ -36,7 +35,7 @@ const authorise = function (req, res, next) {
   let decodedToken = jwt.verify(token, "functionup-lithium-secret-key");
   let userId = req.params.userId;
   if (decodedToken.userId.toString() != userId) {
-    return res.status(403).send({ message: "You are not Authorised" })
+    return res.status(401).send({ message: "You are not Authorised" })
   }
   next()
 }
