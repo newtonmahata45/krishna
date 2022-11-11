@@ -35,7 +35,7 @@ Create API's to do each of the following:
             1. Get all the memes at Postman (https://api.imgflip.com/get_memes)
             2. Pick a memeId you want (Eg 129242436) for the POST request
             3. Create a Post request (https://api.imgflip.com/caption_image) with only query params. Following are the params (copy username and password exactly as given below):
-            template_id <meme_id>
+            template_id <181913649>
             text0 <text you want as a caption>
             text1 <optional>
             username chewie12345
