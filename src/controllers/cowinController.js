@@ -123,6 +123,24 @@ let creatMeme =async function(req,res){
         res.status(400).send({ msg: Error.message})
     }
 }
+let getWeatherCities = async function (req, res) {
+    try {
+        const  id = req.query.appid
+        const cities = ["bengaluru", "mumbai", "delhi", "kolkata", "chennai", "london", "moscow"];
+        const temp = [];
+        for (let i of cities) {
+            const response = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${i}&appid=${id}`);
+            temp.push({ city: i, temp: response.data.main.temp });
+
+        }
+        temp.sort((a, b) => a.temp - b.temp);
+        res.status(200).send({ data :temp});
+    }
+    catch (err) {
+        console.log(err)
+        res.status(500).send({ msg: err.message })
+    }
+}
 module.exports.getStates = getStates;
 module.exports.getDistricts = getDistricts;
 module.exports.getBydist = getBydist;
@@ -130,3 +148,4 @@ module.exports.getByPin = getByPin;
 module.exports.getOtp = getOtp;
 module.exports.getAllmeme = getAllmeme;
 module.exports.creatMeme = creatMeme;
+module.exports.getWeatherCities = getWeatherCities;
