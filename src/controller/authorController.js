@@ -18,9 +18,6 @@ try{
     if(!title){
         return res.send({msg:"Title is mandatory"})
     }
-    // if(title !== ("Mr"|| "Mrs"|| "Miss")){
-    //     return res.send({msg:"Title takes only : Mr, Mrs, Miss"})
-    // }
     if(!email){
         return res.send({msg:"Email Id is mandatory"})
     }
@@ -49,4 +46,4 @@ res.send({data:authors})
 
 }
 module.exports.createAuthor=createAuthor
-module.exports.getAuthorData=getAuthorData
+// module.exports.getAuthorData=getAuthorData
