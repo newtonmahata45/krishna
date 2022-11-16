@@ -9,6 +9,9 @@ router.post("/authors", authorController.createAuthor)
 router.post("/blogs", blogController.createBlog)
 router.get("/blogs", blogController.getFilteredBlog)
 router.delete("/blogs/:blogId", blogController.deleteBlogById)
+// router.delete("/blogs/:blogId", blogController.deleteBlog)
+router.delete("/blogs/", blogController.DeleteBlog)
+router.put("/blogs/:blogId", blogController.putBlog)
 router.post("/login", authorController.loginAuthor)
 
 
