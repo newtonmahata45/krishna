@@ -37,16 +37,36 @@ try{
           else{
     
         let authorCreated=await authorModel.create(author);
-        res.send({data:authorCreated})}
+        res.status(201).send({data:authorCreated})}
 }catch(err){
     return res.status(500).send({ msg: err })
 }
 };
+const loginAuthor = async function (req, res) {
+    let emailId = req.body.email;
+    let password = req.body.password;
+  try{
+    let author = await authorModel.findOne({ email: emailId, password: password });
+    if (!author)
+      return res.send({
+        status: false,
+        msg: "Email Id or the Password is not corerct",
+      });
+  
+    let token = jwt.sign(
+      {
+        authorId: author._id.toString(),
+        batch: "lithiumm",
+        organisation: "FunctionUp",
+      },
+      "functionup-lithium-secret-key"
+    );
+    //res.setHeader("x-auth-token", token);
+    res.status(200).send({ status: true, data: token });
+  }catch(Err){
+    return res.status(500).send({status: false, msg: Err});
+    }
+  };
 
-const getAuthorData=async function(req,res){
-let authors=await authorModel.find()
-res.send({data:authors})
-
-}
 module.exports.createAuthor=createAuthor
-module.exports.getAuthorData=getAuthorData
+module.exports.loginAuthor = loginAuthor

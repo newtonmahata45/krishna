@@ -42,10 +42,14 @@ const createBlog = async function (req, res) {
 }
 const getFilteredBlog = async function (req, res) {
     let authorid = req.query.authorid;
-    let category = req.query.category;
-    let tags = req.query.tags;
-    let subcategory = req.query.subcategory;
+    // let category = req.query.category;
+    // let tags = req.query.tags;
+    // let subcategory = req.query.subcategory;
     try {
+        if (!authorid) {
+            filteredBolg = await blogModel.find({ $and: [{ isDeleted: false }, { isPublished: true }] })
+            return res.status(200).send({ status: true, data: filteredBolg })
+        }
         if(authorid){
             var valid = mongoose.Types.ObjectId.isValid(authorid);
             if (!valid) {
@@ -55,11 +59,7 @@ const getFilteredBlog = async function (req, res) {
             if (!author) {
                 return res.status(400).send({ msg: "This author is not exists" })
             }
-        }
-        if (!authorid ||category ||tags ||subcategory) {
-            filteredBolg = await blogModel.find({ $and: [{ isDeleted: false }, { isPublished: true }] })
-            return res.status(200).send({ status: true, data: filteredBolg })
-        }
+        
         
         // if(authorid ||category|| tags ||subcategory){
         // let filteredBolg = await blogModel.find({ $and: [{ isDeleted: false }, { isPublished: true },{$or: [{ authorId: authorid },{category:category},{tags:tags},{subcategory:subcategory}]}] }).count()
@@ -70,10 +70,40 @@ const getFilteredBlog = async function (req, res) {
         // }
         }
         return res.status(200).send({ status: true, data: filteredBolg })
+    }
     } catch (err) {
         return res.status(500).send({ msg: err })
     }
 }
 
+const deleteBlogById = async function(req,res){
+    let blogId = req.params.blogId;
+
+    try{
+    var valid = mongoose.Types.ObjectId.isValid(blogId);
+    if (!valid) {
+        return res.status(400).send({ msg: "Blog Id is Invalid" })
+    }
+    let blog = await blogModel.findById(blogId);
+    
+    if (!blog) {
+        return res.status(404).send({ msg: "No blog available with this Id" })
+    }
+    if (blog.isDeleted == true){
+        return res.status(400).send({status:false,msg:"Allready Deleted"})
+    }
+    let date = new Date(); 
+    await blogModel.findOneAndUpdate({id:blogId},{ $set: { isDeleted: true, deletedAt: date } })
+    
+    return res.status(200).send()
+}catch(err){
+    return res.status(500).send({ msg: err })
+}
+
+}
+
+
+
 module.exports.createBlog = createBlog
 module.exports.getFilteredBlog = getFilteredBlog
+module.exports.deleteBlogById = deleteBlogById

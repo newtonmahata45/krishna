@@ -8,6 +8,8 @@ const blogController = require("../controller/blogController.js")
 router.post("/authors", authorController.createAuthor)
 router.post("/blogs", blogController.createBlog)
 router.get("/blogs", blogController.getFilteredBlog)
+router.delete("/blogs/:blogId", blogController.deleteBlogById)
+router.post("/login", authorController.loginAuthor)
 
 
 
