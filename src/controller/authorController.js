@@ -1,4 +1,5 @@
-const authorModel= require('../model/authormodel')
+const jwt = require("jsonwebtoken");
+const authorModel= require('../model/authormodel.js')
 
 const createAuthor=async function(req,res){
     let author=req.body
@@ -10,35 +11,35 @@ const createAuthor=async function(req,res){
 
 try{
     if(!fname){
-        return res.status(400).send({msg:"First Name is mandatory"})
+        return res.status(400).send({status:false,msg:"First Name is mandatory"})
     }
     if(!lname){
-        return res.status(400).send({msg:"Last Name is mandatory"})
+        return res.status(400).send({status:false,msg:"Last Name is mandatory"})
     }
     if(!title){
-        return res.status(400).send({msg:"Title is mandatory"})
+        return res.status(400).send({status:false,msg:"Title is mandatory"})
     }
     if(!email){
-        return res.status(400).send({msg:"Email Id is mandatory"})
+        return res.status(400).send({status:false,msg:"Email Id is mandatory"})
     }
     
     if(!password){
-        return res.status(400).send({msg:"Password is mandatory"})
+        return res.status(400).send({status:false,msg:"Password is mandatory"})
     }
     if (title!=("Mr" || "Mrs" || "Miss")){
-        return res.status(400).send({msg:"title takes only: Mr, Mrs or Miss "})
+        return res.status(400).send({status:false,msg:"title takes only: Mr, Mrs or Miss "})
     }
     function validateEmail(input) {
     var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
               return re.test(input);
           }
-        if (validateEmail(email) == false) {return res.send({ msg: "email format is invalid", status: false })}
+        if (validateEmail(email) == false) {return res.status(400).send({ msg: "email format is invalid", status: false })}
           else{
     
         let authorCreated=await authorModel.create(author);
         res.status(201).send({status:true,data:authorCreated})}
 }catch(err){
-    return res.status(500).send({ msg: err })
+    return res.status(500).send({ msg: err.message })
 }
 };
 const loginAuthor = async function (req, res) {
@@ -55,12 +56,13 @@ const loginAuthor = async function (req, res) {
     let token = jwt.sign(
       {
         authorId: author._id.toString(),
-        batch: "lithiumm",
-        organisation: "FunctionUp",
+        userName: emailId,
+        password: password
+        
       },
-      "functionup-lithium-secret-key"
+      "room-2-secret-key"
     );
-    //res.setHeader("x-auth-token", token);
+    res.setHeader("x-api-key", token);
     res.status(200).send({ status: true, data: token });
   }catch(Err){
     return res.status(500).send({status: false, msg: Err.message});
@@ -69,4 +71,3 @@ const loginAuthor = async function (req, res) {
 
 module.exports.createAuthor=createAuthor
 module.exports.loginAuthor = loginAuthor
-// module.exports.getAuthorData=getAuthorData
