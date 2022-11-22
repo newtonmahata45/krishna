@@ -14,6 +14,8 @@ const createCollege = async function (req, res) {
 
          const { name, fullName, logoLink } = data
 
+        // CHECKING FOR EMPTY VALUES.
+
         if(!isValid(name))
           return res.status(400).send({ status: false, message: "Please provide name" })
 
@@ -24,7 +26,7 @@ const createCollege = async function (req, res) {
           return res.status(400).send({ status: false, message: "Please provide logoLink" })
 
 
-        // PASSING AND CHECKING REGEX
+        // PASSING AND CHECKING REGEX.
 
         if(!nameReg.test(name)) 
           return res.status(400).send({ status: false, message: "Name should be in valid format" })
