@@ -2,41 +2,51 @@ const collegeModel = require("../models/collegeModel")
 const internModel = require("../models/internModel")
 
 
+const { isValid, nameReg, fullnameReg, logoRegex } = require("../Validation/validation")
+
 const createCollege = async function (req, res) {
+
     try {
-        const data = req.body
-        const { name, fullName, logoLink } = data
-        const w = Object.keys(req.body)
+         let data = req.body;
 
+        if(Object.keys(data).length == 0)
+          return res.status(400).send({ status: false, message: "Please enter the all the fields" });
+
+         const { name, fullName, logoLink } = data
+
+        if(!isValid(name))
+          return res.status(400).send({ status: false, message: "Please provide name" })
+
+        if(!isValid(fullName))
+          return res.status(400).send({ status: false, message: "Please provide fullName" })
+
+        if(!isValid(logoLink))
+          return res.status(400).send({ status: false, message: "Please provide logoLink" })
+
+
+        // PASSING AND CHECKING REGEX
+
+        if(!nameReg.test(name)) 
+          return res.status(400).send({ status: false, message: "Name should be in valid format" })
         
-        if (Object.keys(req.body).length == 0)
-            return res.status(400).send({ status: false, message: "please fill all the fields" })
 
-        if (Object.keys(req.body).length < 3) return res.status(400).send({ status: false, msg: "body should all property name,fullName,logoLink " })
-
-        if (!["name", "fullName", "logoLink"].includes(...w)) return res.status(400).send({ status: false, msg: "body should only name,fullName,logoLink" })
-
-        if (!/^[a-z]+$/i.test(data.name)) {
-            return    res.status(400).send({ status: false, message: "Name should be in valid format" })
-            }
-
+        if(!fullnameReg.test(fullName)) 
+          return res.status(400).send({ status: false, message: "fullName should be in valid format" })
         
-        if (!/[a-zA-Z\s]+$/ .test(data.fullName)) {
-            return   res.status(400).send({ status: false, message: "fullName should be in valid format" })
-            
-        }
 
-        if (!/https?:\/\/(www\.)?[-a-zA-Z0-9@:%.\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%\+.~#()?&//=]*)/igm/i.test(data.logoLink)) {
-        return    res.status(400).send({ status: false, message: "logoLink should be in valid format" })
-        }
+        if(!logoRegex.test(logoLink)) 
+           return res.status(400).send({ status: false, message: "logoLink should be in valid format" });
+        
+         let checkName = await collegeModel.findOne({ name })
 
+        if(checkName)
+          return res.status(400).send({ status: false, message: " name is already registered." });
 
-        if (!logoLink || logoLink == "")
-            return res.status(400).send({ status: false, message: "please provide the logoLink" })
+        // CREATING NEW DATA WITH ABOVE INFORMATION.
 
-
-        let savedcollege = await collegeModel.create({ name, fullName, logoLink })
+        let savedcollege = await collegeModel.create(data);
         return res.status(201).send({ status: true, data: savedcollege })
+
     }
     catch (err) {
         return res.status(500).send({ status: false, message: err.message })
@@ -46,28 +56,43 @@ const createCollege = async function (req, res) {
 
 
 const listOfCollageIntern = async function (req, res) {
-    let data = req.query
-    const w = Object.keys(req.body)
-    if (!["collegeName"].includes(...w)) return res.status(400).send({ status: false, msg: "query can only collegeName" })
 
+    try {
 
-    let collegeId = await collegeModel.findOne(data)
-    if (!collegeId) { return res.status(400).send({ status: false, msg: "COLLEGE NOT FOUND GIVE RIGHT COLLEGE NAME" }) }
-    if (collegeId.isDeleted) { return res.status(400).send({ status: false, msg: "COLLEGE HAS BEEN DELETED" }) }
+        let data = req.query.collegeName
+        let validKey = Object.keys(req.query)
 
-    let internsNameWithCollege = await internModel.find({ collegeId: collegeId._id })
-    if (internsNameWithCollege.length == 0) return res.status(400).send({ status: false, msg: "NO INTERN FOUND FROM THIS COLLAGE" })
+        if(!["collegeName"].includes(...validKey))
+          return res.status(400).send({ status: false, message: "query can only be collegeName" })
 
-    let NewData = {
-        name: collegeId.name,
-        fullName: collegeId.fullName,
-        logoLink: collegeId.logoLink
+        if(data.trim().length === 0)
+          return res.status(400).send({ status: false, message: "please provide collage name" })
+
+        let collegeId = await collegeModel.findOne({ name: data })
+        if(!collegeId)
+          return res.status(404).send({ status: false, message: "College does not found" })
+
+        if(collegeId.isDeleted)
+          return res.status(400).send({ status: false, message: "This college does not provide internship" })
+
+        let internsNameWithCollege = await internModel.find({ collegeId: collegeId._id, isDeleted: false }).select({ _id: 1, name: 1, email: 1, mobile: 1 })
+
+        if(internsNameWithCollege.length === 0)
+          return res.status(400).send({ status: false, message: "NO intern found from this college" })
+
+        let NewData = {
+            name: collegeId.name,
+            fullName: collegeId.fullName,
+            logoLink: collegeId.logoLink,
+            interns: internsNameWithCollege
+        }
+        return res.status(200).send({ status: true, data: NewData })
+
     }
-
-    return res.status(200).send({ data: NewData, interns: internsNameWithCollege })
-
+    catch (error) {
+        res.status(500).send({ status: false, message: error.message })
+    }
 }
-
 
 
 module.exports = { listOfCollageIntern, createCollege }
