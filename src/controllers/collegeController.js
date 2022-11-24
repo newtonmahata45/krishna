@@ -75,12 +75,12 @@ const listOfCollageIntern = async function (req, res) {
           return res.status(404).send({ status: false, message: "College does not found" })
 
         if(collegeId.isDeleted)
-          return res.status(400).send({ status: false, message: "This college does not provide internship" })
+          return res.status(404).send({ status: false, message: "This college does not provide internship" })
 
         let internsNameWithCollege = await internModel.find({ collegeId: collegeId._id, isDeleted: false }).select({ _id: 1, name: 1, email: 1, mobile: 1 })
 
         if(internsNameWithCollege.length === 0)
-          return res.status(400).send({ status: false, message: "NO intern found from this college" })
+          return res.status(404).send({ status: false, message: "NO intern found from this college" })
 
         let NewData = {
             name: collegeId.name,
