@@ -1,0 +1,64 @@
+.UserForm{
+display: grid;
+    grid-template-columns: repeat(1,1fr);
+    height: 600px;
+    width: 1000px;
+    /* border: 2px solid tomato; */
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    margin: auto;
+    padding: 5px;
+    align-items: center;
+    background-color: rgb(155, 255, 193);
+}
+#h2{
+    text-align: center;
+}
+#container{
+    margin: auto;
+    margin-top: 10px;
+    
+}
+#firstName{
+    height: 35px;
+    width: 400px;
+    margin-bottom: 8px;
+}
+#lastName{
+    height: 35px;
+    width: 400px;
+    margin-bottom: 8px;
+}
+#country{
+    height: 35px;
+    width: 400px;
+    margin-bottom: 8px;
+}
+#gender{
+    height: 35px;
+    width: 400px;
+    margin-bottom: 8px;
+}
+#email{
+    height: 35px;
+    width: 400px;
+    margin-bottom: 8px;
+}
+#file{
+    box-shadow: 1px;
+    margin-bottom: 8px;
+}
+
+#btn{
+    margin: 50px 100px 50px 100;
+    padding: 5px px 6px 6px;
+    border: 0px;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: rgb(127, 83, 230);
+    color: white;
+}
+#btn:hover{
+    background-color: rgb(212, 0, 255);
+    color: white;
+}
