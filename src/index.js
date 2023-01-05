@@ -2,8 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import UserfromData from './userForm/userform';
-
+import App from './App';
 
 
 const CurrentTime = () => {
@@ -15,7 +14,8 @@ setInterval(() => {
   root.render(
     <React.StrictMode>
       <CurrentTime />
-     <UserfromData/>
+      <App/>
     </React.StrictMode>
   )
 }, 1000);
+

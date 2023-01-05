@@ -1,37 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
+
 import './App.css';
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      input: '',
-      showParagraph: false,
-    };
-  }
-  render() {
-    return (
-      <div>
-        <textarea
-          value={this.state.input}
-          onChange={(e) => this.setState({ input: e.target.value })}
-        />
-        <br />
-        <button
-          onClick={() => {
-            this.setState({
-              showParagraph: !this.state.showParagraph,
-            });
-          }}
-        >
-          Display in uppercase
-        </button>
-        {this.state.showParagraph && <p>{this.state.input.toUpperCase()}</p>}
-      </div>
-    );
-  }
+function App() {
+  const [Counter, SetCounter] = useState(0);
+  const incHandeler = () => { SetCounter((count) => count + 1) }
+  const decHandeler = () => { SetCounter((count) => count - 1) }
+  return <div className='app' >
+    <h1 > Counter App</h1>
+    <div className='box' >
+      <button onClick={incHandeler} >Increment</button>
+      <h2 >{Counter} </h2>
+      <button onClick={decHandeler}>Decrement</button>
+    </div>
+  </div>
 }
 
-// import React, { useState } from "react";
-
-export default App ;
+export default App;
