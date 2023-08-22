@@ -136,5 +136,21 @@ for i in range(length):
     print(temp)
     num2 = num1 + num2
     num1 = temp
-    
+
+
+#==================================> Question 8 <=================================================
+def permute(data, i, length):
+    if (i == 1):
+        print(" ".join(data))
+    else:
+        for j in range(i,length):
+            data[i], data[j] = data[j], data[i]
+            permute(data,i+1,length)
+            data[i],data[j]= data[j],data[i]
+string = input("Write your string: ")
+
+n = len(string)
+arr = list(string)
+permute(arr,0,n)
+        
     
