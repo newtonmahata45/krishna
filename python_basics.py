@@ -1,4 +1,4 @@
-# Question 1
+#==================================> Question 1 <=================================================
 
 string = input("Write a sentence: ")
 ans = ""
@@ -13,7 +13,8 @@ for char in string:
 ans += word
 print(ans)
 
-# Question 2
+#==================================> Question 2 <=================================================
+
 
 import random
 
@@ -40,7 +41,7 @@ for i in range(0,length):
     
 print("Password generated: ",password)
 
-# Question 3
+#==================================> Question 3 <=================================================
 
 length =  int(input("Enter no. of elements in the list: "))
 nums = []
@@ -68,7 +69,8 @@ for i in nums:
 print("The second largest is: ", smax)
 print("The second smallest is: ", smin)
 
-# Question 4
+#==================================> Question 4 <=================================================
+
 fnum =  int(input("Enter first number: "))
 operator =  input("Enter the operator ('+','-','*','/'): ")
 snum =  int(input("Enter second number: "))
@@ -84,7 +86,8 @@ elif(operator == "/"):
 else:
     print("Wrong Operator!")
 
-#  Question 5
+#==================================> Question 5 <=================================================
+
 age =  int(input("Enter your age: "))
 if(age < 18 and age > 0):
     print("You are minor.")
@@ -94,7 +97,8 @@ elif(age >= 60 and age < 140):
     print("You are senior.")
 else: print("Worng age")
 
-# Question 6
+#==================================> Question 6 <=================================================
+
 amount = 100000
 pin = "2451"
 num = int(input("To check blance enter 1 \nTo deposit enter 2 \nTo withdraw money enter 3\n"))
@@ -115,7 +119,8 @@ if(inputPin == pin):
             print("Your updated blance is: ", amount - withdraw)
 else: print("Incorrect pin")
 
-# Question 7
+#==================================> Question 7 <=================================================
+
 num1 = 0
 num2 = 1
 length = int(input("Enter length: "))
