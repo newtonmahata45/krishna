@@ -153,4 +153,20 @@ n = len(string)
 arr = list(string)
 permute(arr,0,n)
         
-    
+#==================================> Question 9 <=================================================
+
+import random
+length = 100
+n = random.randint(1,length)
+guess = int(input(f"Guess a number in between 1 and {length}: "))
+atm = 1
+while n!= guess:
+    atm += 1
+    if guess < n:
+        print("Too low!!")
+        guess = int(input("Enter number again: "))
+    elif guess > n:
+        print("Too high!!")
+        guess = int(input("Enter number again: "))
+
+print(f"You guessed it right!!\n It took {atm} attempts.")
