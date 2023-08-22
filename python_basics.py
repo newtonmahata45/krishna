@@ -98,25 +98,31 @@ elif(age >= 60 and age < 140):
 else: print("Worng age")
 
 #==================================> Question 6 <=================================================
-
-amount = 100000
+# Question 6
+blance = 1000
 pin = "2451"
-num = int(input("To check blance enter 1 \nTo deposit enter 2 \nTo withdraw money enter 3\n"))
 inputPin = input("Enter your pin: ")
 
 if(inputPin == pin):
-    if num == 1:
-        print("Your blance is: ", amount)
+    while True:
+        num = int(input("To check blance enter 1 \nTo deposit enter 2 \nTo withdraw money enter 3\n Enter 0 to exit\n"))
+        if num==0:
+            print("Thank you")
+            break
+        elif num == 1:
+            print("Your blance is: ", blance)
 
-    elif num == 2:
-        add = int(input("Enter the amout you want to deposit: "))
-        print("Your updated blance is: ", amount + add)
-    elif num == 3:
-        withdraw = int(input("Enter the amout you want to withdraw: "))
-        if withdraw > amount:
-            print("Insufficient Blance! available blance is: ", amount)
-        else:
-            print("Your updated blance is: ", amount - withdraw)
+        elif num == 2:
+            add = int(input("Enter the amout you want to deposit: "))
+            blance +=add
+            print("Your updated blance is: ", blance)
+        elif num == 3:
+            withdraw = int(input("Enter the amout you want to withdraw: "))
+            if withdraw > blance:
+                print("Insufficient Blance! available blance is: ", blance)
+            else:
+                blance -= withdraw
+                print("Your updated blance is: ",blance)
 else: print("Incorrect pin")
 
 #==================================> Question 7 <=================================================
